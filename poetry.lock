@@ -1376,17 +1376,17 @@ sso = ["social-auth-core[saml] (>=4.5.3,<4.6.0)"]
 
 [[package]]
 name = "nautobot-design-builder"
-version = "2.0.1"
+version = "2.1.0"
 description = "Nautobot app that uses design templates to easily create data objects in Nautobot with minimal input from a user."
 optional = false
 python-versions = "<3.13,>=3.8.1"
 files = [
-    {file = "nautobot_design_builder-2.0.1-py3-none-any.whl", hash = "sha256:8e37f7c76e1213378398e3e1673d0bfe3d60b2911ed6a33eabe12ca020a61359"},
-    {file = "nautobot_design_builder-2.0.1.tar.gz", hash = "sha256:705ba8c37eb7dced41df42e2b3229a0018c9500c2bd1e768b3a81e0af144a0b1"},
+    {file = "nautobot_design_builder-2.1.0-py3-none-any.whl", hash = "sha256:177072ebfdbb3992b7194a4f5242982ceff0896a4f91c1b8a728af8207a6af9d"},
+    {file = "nautobot_design_builder-2.1.0.tar.gz", hash = "sha256:19d1282e3a4b61030c59612e5e7fe3baac8ff8a7b5e6a903eb2d665119a911dd"},
 ]
 
-[package.extras]
-nautobot = ["nautobot (>=2.0.3,<=2.9999)"]
+[package.dependencies]
+nautobot = ">=2.0.3,<3.0"
 
 [[package]]
 name = "netaddr"
@@ -2374,4 +2374,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "67a6229ae0fc688a1d079e5b3700f82bf123206a3c8ae4dc72f37d1aa7282192"
+content-hash = "0f115ce9cc5f8e5e686b89bb880be52e8bd9c3fe11904d0b0e9ebd5a952654b4"
