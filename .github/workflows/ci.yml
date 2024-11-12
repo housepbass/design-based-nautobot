@@ -87,7 +87,7 @@ jobs:
         run: "poetry run python sync_jobs_repo.py"
 
   run_design_jobs:
-    needs: "run_design_jobs_DRYRUN"
+    needs: "sync_jobs_repo"
     runs-on: "ubuntu-20.04"
     env:
       INVOKE_NAUTOBOT_DOCKER_COMPOSE_LOCAL: "True"
