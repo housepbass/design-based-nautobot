@@ -1,10 +1,14 @@
 ---
 name: "CI"
 on:  # yamllint disable
-  - "pull_request"
+  pull_request:
+    branches:
+      - main
+
 env:
   PROD_NAUTOBOT_URL: ${{ secrets.PROD_NAUTOBOT_URL }}
   PROD_NAUTOBOT_TOKEN: ${{ secrets.PROD_NAUTOBOT_TOKEN }}
+
 jobs:
   yamllint:
     runs-on: "ubuntu-20.04"
@@ -17,6 +21,7 @@ jobs:
         uses: "networktocode/gh-action-setup-poetry-environment@v6"
       - name: "Linting: yamllint"
         run: "poetry run invoke yamllint"
+
   # unittest:
   #   needs: "yamllint"
   #   strategy:
@@ -65,6 +70,7 @@ jobs:
   #           CI=true
   #     - name: "Run Tests"
   #       run: "poetry run invoke unittest"
+
   sync_jobs_repo:
     # needs: "unittest"
     runs-on: "ubuntu-20.04"
@@ -79,21 +85,7 @@ jobs:
         run: "poetry install"
       - name: "Sync Jobs Repo"
         run: "poetry run python sync_jobs_repo.py"
-  run_design_jobs_DRYRUN:
-    needs: "sync_jobs_repo"
-    runs-on: "ubuntu-20.04"
-    env:
-      INVOKE_NAUTOBOT_DOCKER_COMPOSE_LOCAL: "True"
-    steps:
-      - name: "Check out repository code"
-        uses: "actions/checkout@v4"
-      - name: "Setup environment"
-        uses: "networktocode/gh-action-setup-poetry-environment@v6"
-      - name: "Install dependencies"
-        run: "poetry install --no-root"
-      - name: "DRYRUN Run Design Jobs"
-        run: "poetry run python DRYRUN_run_design_jobs.py"
-  ### This should run only upon new release.
+
   run_design_jobs:
     needs: "run_design_jobs_DRYRUN"
     runs-on: "ubuntu-20.04"

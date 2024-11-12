@@ -1,18 +1,9 @@
 """Tests module."""
 
-from unittest import TestCase
-
 from nautobot.apps.testing import (
     TransactionTestCase,
     create_job_result_and_run_job,
 )
-
-class FirstTest(TestCase):
-    """First test case."""
-
-    def test_first(self):
-        """First test."""
-        self.assertEqual(1, 1)
 
 class RunJobTestCase(TransactionTestCase):
     """Test Class."""
