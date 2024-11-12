@@ -16,7 +16,9 @@ class InitialDesign(DesignJob):
 
         name = "Initial Data"
         commit_default = False
-        design_file = "designs/0001_design.yaml.j2"
+        design_files = [
+            "designs/0001_initial.yaml.j2",
+        ]
         version = "1.0.0"
         context_class = InitialDesignContext
         design_mode = DesignModeChoices.DEPLOYMENT
