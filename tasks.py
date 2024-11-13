@@ -333,7 +333,7 @@ def db_import(context):
 
 @task
 def run_design_jobs(context):
-    """Launch a bash shell inside the running Nautobot container."""
+    """Run Design Jobs."""
     run_command(context, "python run_design_jobs.py")
 
 # ------------------------------------------------------------------------------

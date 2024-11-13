@@ -6,13 +6,45 @@ This project illustrates one way that [Nautobot Design Builder](https://github.c
 * User updates data in repository (Add VLAN to an interface trunk, for example)
 * User pushes code back to repo and opens a PR
 * Github actions runs CI against the submitted code. CI steps:
-  * Check that the change is valid
-  * Run the DesignJob against a fresh Nautobot instance on a github actions runner
+  * Run the DesignJob against a fresh Nautobot instance on a github actions runner, ensuring data validity.
   * If CI passes, the DesignJob changes are synced to the production Nautobot instance and the Job is run there which updates production Nautobot.
 
 Future CI improvement options:
 * Run [Nautobot Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/) Jobs
 * Run SuzieQ/NUTS/Batfish verification checks against newly generated or deployed configurations
+
+## Quick Start
+
+* Install Poetry and Invoke
+* Clone this repo
+* Copy the `local.env.example` file to `local.env` and `creds.example.env` file to `creds.env` in the environments folder.
+  ```bash
+  cp environments/local.example.env environments/local.env
+  cp environments/creds.example.env environments/creds.env
+  ```
+* Install the python packages, prepare local environment
+  ```bash
+  poetry shell
+  poetry lock
+  poetry install
+  ```
+* Start the local environment Nautobot instance
+  ```bash
+  invoke build
+  `invoke start` or `invoke debug`
+  ```
+* Launch the local DesignJobs via API
+  ```bash
+  invoke run-design-jobs
+  ```
+* For funzies, run unit tests against the DesignJobs
+  ```bash
+  invoke unittest
+  ```
+* At this point you can poke around to understand the machinery of the local environment.
+
+## Pushing to Production
+#TBD
 
 > This project was originally forked from [nautobot-docker-compose](https://github.com/nautobot/nautobot-docker-compose)
 
