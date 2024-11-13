@@ -331,6 +331,11 @@ def db_import(context):
     print("Importing DB...\n")
     docker_compose(context, import_cmd, pty=True)
 
+@task
+def run_design_jobs(context):
+    """Launch a bash shell inside the running Nautobot container."""
+    run_command(context, "python run_design_jobs.py")
+
 # ------------------------------------------------------------------------------
 # TESTS
 # ------------------------------------------------------------------------------

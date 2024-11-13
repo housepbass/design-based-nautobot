@@ -1,3 +1,21 @@
+# Design Driven Nautobot
+
+This project illustrates one way that [Nautobot Design Builder](https://github.com/nautobot/nautobot-app-design-builder) can be leveraged to maintain data in a Nautobot instance with a CI/CD first approach. The high level workflow is:
+
+* User clones this repo, creates a feature branch
+* User updates data in repository (Add VLAN to an interface trunk, for example)
+* User pushes code back to repo and opens a PR
+* Github actions runs CI against the submitted code. CI steps:
+  * Check that the change is valid
+  * Run the DesignJob against a fresh Nautobot instance on a github actions runner
+  * If CI passes, the DesignJob changes are synced to the production Nautobot instance and the Job is run there which updates production Nautobot.
+
+Future CI improvement options:
+* Run [Nautobot Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/) Jobs
+* Run SuzieQ/NUTS/Batfish verification checks against newly generated or deployed configurations
+
+> This project was originally forked from [nautobot-docker-compose](https://github.com/nautobot/nautobot-docker-compose)
+
 # nautobot-docker-compose
 
 Network to Code has an existing published Nautobot Docker Image on Docker Hub. See [here](https://hub.docker.com/repository/docker/networktocode/nautobot). This project uses Docker Compose. The Docker compose file in this project pulls that Nautobot Docker image using the latest stable Nautobot release along with several other Docker images required for Nautobot to function. See the diagram below. This project is for those looking for a multi-container single-node install for Nautobot often coupled with backup & HA capabilities from their hypervisor manager.

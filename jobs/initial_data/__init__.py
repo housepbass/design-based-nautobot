@@ -23,5 +23,6 @@ class InitialDesign(DesignJob):
         context_class = InitialDesignContext
         design_mode = DesignModeChoices.DEPLOYMENT
 
-name = "Demo Designs"
+# Group all designs into the "Design Builder" Jobs section so unittests can discover them
+name = "Design Builder"
 register_jobs(InitialDesign)

@@ -3,25 +3,25 @@ import os
 from time import sleep
 from pynautobot import api
 
-nb = api(url=os.environ["PROD_NAUTOBOT_URL"], token=os.environ["PROD_NAUTOBOT_TOKEN"], verify=False)
+nb = api(url=os.environ["NAUTOBOT_URL"], token=os.environ["NAUTOBOT_TOKEN"], verify=False)
 
-#TODO: Dynamically find all Design Jobs and run them if they've changed
-design_job = nb.extras.jobs.get(name="Initial Data")
+JOB_STATUSES = ["PENDING", "FAILURE", "COMPLETED", "CANCELLED", "CREATED", "SUCCESS"]
 
-#TODO: Figure out how to generate deployment names. Maybe just use the design name?
-job_run = nb.extras.jobs.run(job_id=design_job.id, data={"dryrun": False, "deployment_name": "Initial Data"})
-result = nb.extras.job_results.get(job_run.job_result.id)
+# Dynamically find all Design Jobs
+DESIGN_JOBS = nb.extras.jobs.filter(grouping="Design Builder", name__nie="Decommission Design Deployments")
 
-job_statuses = ["PENDING", "FAILURE", "COMPLETED", "CANCELLED", "CREATED", "SUCCESS"]
-
-while result.status.value not in job_statuses:
+for design_job in DESIGN_JOBS:
+    job_run = nb.extras.jobs.run(job_id=design_job.id, data={"dryrun": False, "deployment_name": design_job.name})
     result = nb.extras.job_results.get(job_run.job_result.id)
-    print("Job is running...")
-    sleep(1)
 
-if result.status.value != "SUCCESS":
-    msg = f"Design Job failed with traceback `{result.traceback}`"
-    raise Exception(msg)
+    while result.status.value not in JOB_STATUSES:
+        result = nb.extras.job_results.get(job_run.job_result.id)
+        print(f"Design Job `{design_job.name}` is running...")
+        sleep(1)
 
-print(f"Job completed with status `{result.status.value}`")
-# TODO: PRINT JOB LOGS
+    if result.status.value != "SUCCESS":
+        msg = f"Design Job failed with traceback `{result.traceback}`"
+        raise Exception(msg)
+
+    print(f"Design Job completed with status `{result.status.value}`")
+    # TODO: PRINT JOB LOGS
