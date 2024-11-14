@@ -6,8 +6,8 @@ on:  # yamllint disable
       - main
 
 env:
-  PROD_NAUTOBOT_URL: ${{ secrets.PROD_NAUTOBOT_URL }}
-  PROD_NAUTOBOT_TOKEN: ${{ secrets.PROD_NAUTOBOT_TOKEN }}
+  NAUTOBOT_URL: ${{ secrets.NAUTOBOT_URL }}
+  NAUTOBOT_TOKEN: ${{ secrets.NAUTOBOT_TOKEN }}
 
 jobs:
   yamllint:

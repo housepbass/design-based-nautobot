@@ -3,7 +3,7 @@ import os
 from time import sleep
 from pynautobot import api
 
-nb = api(url=os.environ["PROD_NAUTOBOT_URL"], token=os.environ["PROD_NAUTOBOT_TOKEN"], verify=False)
+nb = api(url=os.environ["NAUTOBOT_URL"], token=os.environ["NAUTOBOT_TOKEN"], verify=False)
 
 sync_repo_job = nb.extras.jobs.get(name="Git Repository: Sync")
 jobs_repo = nb.extras.git_repositories.get(name="Jobs Repo")
