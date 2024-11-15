@@ -32,7 +32,7 @@ namespace.configure(
         "nautobot_docker_compose": {
             "project_name": "nautobot_docker_compose",
             "python_ver": "3.11",
-            "nautobot_ver": "2.3.6",
+            "nautobot_ver": "2.3.11",
             "local": False,
             "use_django_extensions": True,
             "compose_dir": os.path.join(os.path.dirname(__file__), "environments/"),
