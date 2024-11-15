@@ -60,7 +60,6 @@ At this point your Nautobot data should be in sync with your designs stored in G
   ```bash
   invoke unittest
   ```
-* At this point you can poke around to understand the machinery of the local environment.
 
 > This project was originally forked from [nautobot-docker-compose](https://github.com/nautobot/nautobot-docker-compose). Everything beyond this point in the README came from the original nautobot-docker-compose project.
 
