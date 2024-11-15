@@ -52,6 +52,8 @@ At this point your Nautobot data should be in sync with your designs stored in G
   invoke build
   `invoke start` or `invoke debug`
   ```
+* Login via `http://localhost:8080`. Creds should be `admin/admin`
+* Generate an API token for your local user and update the `NAUTOBOT_TOKEN` environment variable value in `environments/creds.env`
 * Launch the local Design Jobs via API
   ```bash
   invoke run-design-jobs
