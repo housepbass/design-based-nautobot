@@ -18,6 +18,7 @@ Future CI improvement options:
 To use this project to push changes to your production Nautobot instance, do the following:
 
 * Make a copy of this project by [forking the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
+* Install [Nautobot Design Builder](https://github.com/nautobot/nautobot-app-design-builder) version `2.1.0`
 * Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
   * You'll likely need to add git username and token as [Secrets](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/secret/).
   * Once sync'd, *make sure to enable the newly installed Design Job(s) via the Jobs UI*
