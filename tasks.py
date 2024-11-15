@@ -31,8 +31,8 @@ namespace.configure(
     {
         "nautobot_docker_compose": {
             "project_name": "nautobot_docker_compose",
-            "python_ver": "3.10",
-            "nautobot_ver": "2.3.2",
+            "python_ver": "3.11",
+            "nautobot_ver": "2.3.11",
             "local": False,
             "use_django_extensions": True,
             "compose_dir": os.path.join(os.path.dirname(__file__), "environments/"),
@@ -330,6 +330,11 @@ def db_import(context):
 
     print("Importing DB...\n")
     docker_compose(context, import_cmd, pty=True)
+
+@task
+def run_design_jobs(context):
+    """Run Design Jobs."""
+    run_command(context, "python run_design_jobs.py")
 
 # ------------------------------------------------------------------------------
 # TESTS

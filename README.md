@@ -1,3 +1,68 @@
+# Design Driven Nautobot
+
+This project illustrates one way that [Nautobot Design Builder](https://github.com/nautobot/nautobot-app-design-builder) can be leveraged to maintain data in a Nautobot instance with a CI/CD first approach. The high level workflow is:
+
+* User clones this repo, creates a feature branch
+* User updates data in repository (Add VLAN to an interface trunk, for example)
+* User pushes code back to repo and opens a PR
+* Github actions runs CI against the submitted code. CI steps:
+  * Run the Design Job against a fresh Nautobot instance on a github actions runner, ensuring data validity
+  * If CI passes, the Design Job changes are synced to the production Nautobot instance and the Job is run there which updates production Nautobot.
+
+Future CI improvement options:
+* Run [Nautobot Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/) Jobs
+* Run SuzieQ/NUTS/Batfish verification checks against newly generated or deployed configurations
+
+## Quick Start
+
+* Install Poetry and Invoke
+* Clone this repo
+* Copy the `local.env.example` file to `local.env` and `creds.example.env` file to `creds.env` in the environments folder.
+  ```bash
+  cp environments/local.example.env environments/local.env
+  cp environments/creds.example.env environments/creds.env
+  ```
+* Install the python packages, prepare local environment
+  ```bash
+  poetry shell
+  poetry lock
+  poetry install
+  ```
+* Start the local environment Nautobot instance
+  ```bash
+  invoke build
+  `invoke start` or `invoke debug`
+  ```
+* Launch the local Design Jobs via API
+  ```bash
+  invoke run-design-jobs
+  ```
+* For funzies, run unit tests against the Design Jobs
+  ```bash
+  invoke unittest
+  ```
+* At this point you can poke around to understand the machinery of the local environment.
+
+## Pushing to Production
+
+To use this project to push changes to your production Nautobot instance, do the following:
+
+* Clone your own copy of this project into your own repository
+* Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
+  * You'll likely need to add git username and token as [Secrets](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/secret/).
+  * Once sync'd, *make sure to enable the newly installed Design Job(s) via the Jobs UI*
+* In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs.
+* Poke around in the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot. You can extend this design or add new Design Jobs as desired.
+* Change something in the design file and open a PR against your repo's main branch
+  * This should trigger CI which will do the following:
+    * Test your Design Jobs against a containerized version of Nautobot in Github Actions
+    * If tests pass, send an API call to your Nautobot instance to synchronize the updated Design Job
+    * Send another API call to run the Design Jobs
+
+At this point, your Nautobot data should be in sync with your designs stored in Git. Now you have a starting point for CICD with Github actions. Have fun!
+
+> This project was originally forked from [nautobot-docker-compose](https://github.com/nautobot/nautobot-docker-compose). Everything beyond this point in the README came from the original nautobot-docker-compose project.
+
 # nautobot-docker-compose
 
 Network to Code has an existing published Nautobot Docker Image on Docker Hub. See [here](https://hub.docker.com/repository/docker/networktocode/nautobot). This project uses Docker Compose. The Docker compose file in this project pulls that Nautobot Docker image using the latest stable Nautobot release along with several other Docker images required for Nautobot to function. See the diagram below. This project is for those looking for a multi-container single-node install for Nautobot often coupled with backup & HA capabilities from their hypervisor manager.
