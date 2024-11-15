@@ -7,7 +7,7 @@ This project illustrates one way that [Nautobot Design Builder](https://github.c
 * User pushes code back to repo and opens a PR
 * Github actions runs CI against the submitted code. CI steps:
   * Run the Design Job against a fresh Nautobot instance on a github actions runner, ensuring data validity
-  * If CI passes, the Design Job changes are synced to the production Nautobot instance and the Job is run there which updates production Nautobot.
+  * If CI passes, the Design Job changes are synced to the production Nautobot instance and the Job is run there which updates production Nautobot data
 
 Future CI improvement options:
 * Run [Nautobot Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/) Jobs
@@ -20,18 +20,17 @@ To use this project to push changes to your production Nautobot instance, do the
 * Make a copy of this project by [forking the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
 * Install [Nautobot Design Builder](https://github.com/nautobot/nautobot-app-design-builder) version `2.1.0`
 * Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
-  * You'll likely need to add git username and token as [Secrets](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/secret/).
-  * Once sync'd, *make sure to enable the newly installed Design Job(s) via the Jobs UI*
-* In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs.
-* Poke around in the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot. You can extend this design or add new Design Jobs as desired.
-* Change something in the design file and open a PR against your repo's main branch
+  * Once sync'd, make sure to enable the newly installed Design Job(s) via the Jobs UI
+* In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs
+* Look through the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot
+* Open a PR against your repo's main branch
   * This should trigger CI which will do the following:
     * Test your Design Jobs against a containerized version of Nautobot in Github Actions
     * If tests pass, send an API call to your Nautobot instance to synchronize the updated Design Job
     * Send another API call to run the Design Jobs
 * After CI, you can see the newly created data in a consolidated view by navigating to `Designs` -> `Design Deployments` -> `Initial Data`
 
-At this point, your Nautobot data should be in sync with your designs stored in Git. Now you have a starting point for CICD with Github actions. Have fun!
+At this point your Nautobot data should be in sync with your designs stored in Git. Now you have a starting point for CICD'd Nautobot with Github actions. Try updating the existing Design Job file and running through the process again. Then, create a new Design Job altogether with a new set of data. Have fun!
 
 ## Local Development
 
