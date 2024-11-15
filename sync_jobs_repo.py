@@ -1,7 +1,13 @@
 """Module for syncing git to Nautobot."""
 import os
+import logging
 from time import sleep
 from pynautobot import api
+
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 nb = api(url=os.environ["NAUTOBOT_URL"], token=os.environ["NAUTOBOT_TOKEN"], verify=False)
 
@@ -15,8 +21,8 @@ job_statuses = ["PENDING", "FAILURE", "COMPLETED", "CANCELLED", "CREATED", "SUCC
 
 while result.status.value not in job_statuses:
     result = nb.extras.job_results.get(job_run.job_result.id)
-    print("Git Sync is running...")
+    logging.info("Git Sync is running...")
     sleep(1)
 
 
-print(f"Git Sync Job completed with status `{result.status.value}`")
+logging.info("Git Sync Job completed with status `%s`", result.status.value)

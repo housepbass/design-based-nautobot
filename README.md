@@ -15,6 +15,26 @@ Future CI improvement options:
 
 ## Quick Start
 
+To use this project to push changes to your production Nautobot instance, do the following:
+
+* Make a copy of this project by [forking the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
+* Install [Nautobot Design Builder](https://github.com/nautobot/nautobot-app-design-builder) version `2.1.0`
+* Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
+  * You'll likely need to add git username and token as [Secrets](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/secret/).
+  * Once sync'd, *make sure to enable the newly installed Design Job(s) via the Jobs UI*
+* In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs.
+* Poke around in the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot. You can extend this design or add new Design Jobs as desired.
+* Change something in the design file and open a PR against your repo's main branch
+  * This should trigger CI which will do the following:
+    * Test your Design Jobs against a containerized version of Nautobot in Github Actions
+    * If tests pass, send an API call to your Nautobot instance to synchronize the updated Design Job
+    * Send another API call to run the Design Jobs
+* After CI, you can see the newly created data in a consolidated view by navigating to `Designs` -> `Design Deployments` -> `Initial Data`
+
+At this point, your Nautobot data should be in sync with your designs stored in Git. Now you have a starting point for CICD with Github actions. Have fun!
+
+## Local Development
+
 * Install Poetry and Invoke
 * Clone this repo
 * Copy the `local.env.example` file to `local.env` and `creds.example.env` file to `creds.env` in the environments folder.
@@ -42,24 +62,6 @@ Future CI improvement options:
   invoke unittest
   ```
 * At this point you can poke around to understand the machinery of the local environment.
-
-## Pushing to Production
-
-To use this project to push changes to your production Nautobot instance, do the following:
-
-* Clone your own copy of this project into your own repository
-* Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
-  * You'll likely need to add git username and token as [Secrets](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/secret/).
-  * Once sync'd, *make sure to enable the newly installed Design Job(s) via the Jobs UI*
-* In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs.
-* Poke around in the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot. You can extend this design or add new Design Jobs as desired.
-* Change something in the design file and open a PR against your repo's main branch
-  * This should trigger CI which will do the following:
-    * Test your Design Jobs against a containerized version of Nautobot in Github Actions
-    * If tests pass, send an API call to your Nautobot instance to synchronize the updated Design Job
-    * Send another API call to run the Design Jobs
-
-At this point, your Nautobot data should be in sync with your designs stored in Git. Now you have a starting point for CICD with Github actions. Have fun!
 
 > This project was originally forked from [nautobot-docker-compose](https://github.com/nautobot/nautobot-docker-compose). Everything beyond this point in the README came from the original nautobot-docker-compose project.
 

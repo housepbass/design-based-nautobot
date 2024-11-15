@@ -1,7 +1,13 @@
 """Module for running design jobs."""
 import os
+import logging
 from time import sleep
 from pynautobot import api
+
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 nb = api(url=os.environ["NAUTOBOT_URL"], token=os.environ["NAUTOBOT_TOKEN"], verify=False)
 
@@ -16,12 +22,11 @@ for design_job in DESIGN_JOBS:
 
     while result.status.value not in JOB_STATUSES:
         result = nb.extras.job_results.get(job_run.job_result.id)
-        print(f"Design Job `{design_job.name}` is running...")
-        sleep(1)
+        logging.info("Design Job `%s` is running...", design_job.name)
+        sleep(5)
 
     if result.status.value != "SUCCESS":
         msg = f"Design Job failed with traceback `{result.traceback}`"
         raise Exception(msg)
 
-    print(f"Design Job completed with status `{result.status.value}`")
-    # TODO: PRINT JOB LOGS
+    logging.info("Design Job `%s` completed with status `%s`", design_job.name, result.status.value)
