@@ -22,7 +22,7 @@ To use this project to push changes to your production Nautobot instance, do the
 * Add your new [repository to Nautobot as a git datasource](https://docs.nautobot.com/projects/core/en/stable/user-guide/platform-functionality/gitrepository/) that provides `Jobs`
   * Once sync'd, make sure to enable the newly installed Design Job(s) via the Jobs UI
 * In your designs github repo, add two new [secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) named `NAUTOBOT_URL` and `NAUTOBOT_TOKEN`. Populate the values with your Nautobot URL and API token. These will be used during CI to connect to your Nautobot instance and sync and run the Design Jobs
-* Look through the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be in Nautobot
+* Look through the design file at `jobs/initial_data/designs/0001_initial.yaml.j2`. This file dictates what data will be created in Nautobot
 * Open a PR against your repo's main branch
   * This should trigger CI which will do the following:
     * Test your Design Jobs against a containerized version of Nautobot in Github Actions
